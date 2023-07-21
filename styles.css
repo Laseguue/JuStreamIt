@@ -1,0 +1,169 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #141414;
+    color: #ffffff;
+}
+
+header {
+    background-color: #b41111;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+}
+
+#header {
+    opacity: 1;
+    transition: opacity 0.5s;  
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ddd;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center;
+}
+
+section h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #b41111;
+    width: 100%; 
+    text-align: center; 
+}
+
+section div {
+    display: inline-block;
+    padding: 10px;
+    box-sizing: border-box;
+    vertical-align: top;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+section div:hover {
+    transform: scale(1.05);
+}
+
+section div img {
+    width: 200px;  
+    height: 300px; 
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+section div p {
+    font-size: 1em;
+    text-align: center; 
+}
+#best-movie img {
+    width: 100%; 
+    height: auto;
+}
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #b41111;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.movies-container {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.movies {
+    display: inline-block;
+    transition: transform 0.5s;
+}
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(180, 19, 19, 0.8);
+    color: #fff;
+    border: none;
+    font-size: 2em;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.arrow:hover {
+    background: rgba(180, 19, 19, 0.8);
+}
+
+.left-arrow {
+    left: -25px;  
+}
+
+.right-arrow {
+    right: -25px;  
+}
+
+section {
+    position: relative;
+}
+
+#top-rated .arrow {
+    display: none;
+}

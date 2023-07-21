@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustStremIt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header id="header">
+        <h1>JustStremIt</h1>
+        <nav>
+            <a id="home" href="index.html#">Accueil</a>
+            <a id="categories" href="category.html#">Catégories</a>
+        </nav>
+    </header>
+    <main>
+        <section id="best-movie">
+            <h2>Meilleur film</h2>
+            <div class="movie"></div>
+        </section>
+        <section id="top-rated">
+            <h2>Films les mieux notés</h2>
+            <div class="movies"></div>
+            <button class="arrow left-arrow"><i class="fas fa-angle-left"></i></button>
+            <button class="arrow right-arrow"><i class="fas fa-angle-right"></i></button>
+        </section>
+        <section id="category1">
+            <h2>History</h2>
+            <div class="movies"></div>
+            <button class="arrow left-arrow"><i class="fas fa-angle-left"></i></button>
+            <button class="arrow right-arrow"><i class="fas fa-angle-right"></i></button>
+        </section>
+        <section id="category2">
+            <h2>Documentary</h2>
+            <div class="movies"></div>
+            <button class="arrow left-arrow"><i class="fas fa-angle-left"></i></button>
+            <button class="arrow right-arrow"><i class="fas fa-angle-right"></i></button>
+        </section>
+        <section id="category3">
+            <h2>Sci-Fi</h2>
+            <div class="movies"></div>
+            <button class="arrow left-arrow"><i class="fas fa-angle-left"></i></button>
+            <button class="arrow right-arrow"><i class="fas fa-angle-right"></i></button>
+        </section>
+    </main>
+    <footer>
+        <p>Projet réalisé par Laseguue</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="movie-details"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
