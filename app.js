@@ -6,15 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const TOP_RATED_SECTION = document.getElementById('top-rated');
 
     const CATEGORY_SECTIONS = [
-        { element: document.getElementById('category1'), genre: 'History', title: "Histoire" },
-        { element: document.getElementById('category2'), genre: 'Documentary', title: "Documentaire" },
-        { element: document.getElementById('category3'), genre: 'Sci-Fi', title: "Sci-Fi" },
-        { element: document.getElementById('category4'), genre: 'Action', title: "Action" },
-        { element: document.getElementById('category5'), genre: 'Sport', title: "Sport" },
+        { id: 'category1', element: document.getElementById('category1'), genre: 'History', title: "Histoire" },
+        { id: 'category2', element: document.getElementById('category2'), genre: 'Documentary', title: "Documentaire" },
+        { id: 'category3', element: document.getElementById('category3'), genre: 'Sci-Fi', title: "Sci-Fi" },
+        { id: 'category4', element: document.getElementById('category4'), genre: 'Action', title: "Action" },
+        { id: 'category5', element: document.getElementById('category5'), genre: 'Sport', title: "Sport" },
     ];
 
-    let categoryPages = [1, 1, 1, 1, 1];
-    let topRatedPage = 1;
+    let categoryPages = {
+        'top-rated': 1,
+        'category1': 1,
+        'category2': 1,
+        'category3': 1,
+        'category4': 1,
+        'category5': 1,
+    };
 
     fetch(TITLES_ENDPOINT + '?sort_by=-imdb_score&limit=1')
         .then(response => response.json())
@@ -22,42 +28,46 @@ document.addEventListener('DOMContentLoaded', function() {
             displayMovie(BEST_MOVIE_SECTION, data.results[0]);
         });
 
-    fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+    fetchMoviesByGenre(null, TOP_RATED_SECTION, categoryPages['top-rated']);
 
     TOP_RATED_SECTION.querySelector('.left-arrow').addEventListener('click', () => {
-        if (topRatedPage > 1) {
-            topRatedPage--;
-            fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+        if (categoryPages['top-rated'] > 1) {
+            categoryPages['top-rated']--;
+            fetchMoviesByGenre(null, TOP_RATED_SECTION, categoryPages['top-rated']);
         }
     });
 
     TOP_RATED_SECTION.querySelector('.right-arrow').addEventListener('click', () => {
-        topRatedPage++;
-        fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+        if (categoryPages['top-rated'] < 2) {  // The check is for page 2, because we know there are only 7 top rated movies.
+            categoryPages['top-rated']++;
+            fetchMoviesByGenre(null, TOP_RATED_SECTION, categoryPages['top-rated']);
+        }
     });
 
     CATEGORY_SECTIONS.forEach((section, index) => {
-        fetchMoviesByGenre(section.genre, section.element, categoryPages[index]);
+        fetchMoviesByGenre(section.genre, section.element, categoryPages[section.id]);
 
         section.element.querySelector('h2').innerText = section.title;
 
         section.element.querySelector('.left-arrow').addEventListener('click', () => {
-            if (categoryPages[index] > 1) {
-                categoryPages[index]--;
-                fetchMoviesByGenre(section.genre, section.element, categoryPages[index]);
+            if (categoryPages[section.id] > 1) {
+                categoryPages[section.id]--;
+                fetchMoviesByGenre(section.genre, section.element, categoryPages[section.id]);
             }
         });
 
         section.element.querySelector('.right-arrow').addEventListener('click', () => {
-            categoryPages[index]++;
-            fetchMoviesByGenre(section.genre, section.element, categoryPages[index]);
+            if (categoryPages[section.id] < 2) {
+                categoryPages[section.id]++;
+                fetchMoviesByGenre(section.genre, section.element, categoryPages[section.id]);
+            }
         });
     });
 
     function fetchMoviesByGenre(genre, section, page = 1) {
         let url = genre ? 
-            TITLES_ENDPOINT + `?genre_contains=${genre}&page_size=7&page=${page}` : 
-            TITLES_ENDPOINT + `?sort_by=-imdb_score&page_size=7&page=${page}`;
+            TITLES_ENDPOINT + `?genre_contains=${genre}&page_size=7` : 
+            TITLES_ENDPOINT + `?sort_by=-imdb_score&page_size=7`;
 
         fetch(url)
             .then(response => response.json())
@@ -65,12 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 while (section.querySelector('.movies').children.length > 0) {
                     section.querySelector('.movies').removeChild(section.querySelector('.movies').lastChild);
                 }
-                data.results.forEach((movie, index) => displayMovie(section.querySelector('.movies'), movie, index));
+                data.results.forEach((movie, index) => displayMovie(section.querySelector('.movies'), movie, index, page));
             });
     }
 
-    function displayMovie(section, movie, index = 0) {
-        if(index < 4) {
+    function displayMovie(section, movie, index = 0, page = 1) {
+        let startIndex = (page - 1) * 4;
+        let endIndex = startIndex + 4;
+        if (index >= startIndex && index < endIndex) {
             let movieElement = document.createElement('div');
             movieElement.className = 'movie';
             movieElement.innerHTML = `
