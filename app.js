@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     let categoryPages = [1, 1, 1, 1, 1];
+    let topRatedPage = 1;
 
     fetch(TITLES_ENDPOINT + '?sort_by=-imdb_score&limit=1')
         .then(response => response.json())
@@ -21,11 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
             displayMovie(BEST_MOVIE_SECTION, data.results[0]);
         });
 
-    fetch(TITLES_ENDPOINT + '?sort_by=-imdb_score&limit=7')
-        .then(response => response.json())
-        .then(data => {
-            data.results.slice(1).forEach(movie => displayMovie(TOP_RATED_SECTION, movie));
-        });
+    fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+
+    TOP_RATED_SECTION.querySelector('.left-arrow').addEventListener('click', () => {
+        if (topRatedPage > 1) {
+            topRatedPage--;
+            fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+        }
+    });
+
+    TOP_RATED_SECTION.querySelector('.right-arrow').addEventListener('click', () => {
+        topRatedPage++;
+        fetchMoviesByGenre(null, TOP_RATED_SECTION, topRatedPage);
+    });
 
     CATEGORY_SECTIONS.forEach((section, index) => {
         fetchMoviesByGenre(section.genre, section.element, categoryPages[index]);
@@ -46,27 +55,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function fetchMoviesByGenre(genre, section, page = 1) {
-        fetch(TITLES_ENDPOINT + `?genre_contains=${genre}&page_size=5&page=${page}`)
+        let url = genre ? 
+            TITLES_ENDPOINT + `?genre_contains=${genre}&page_size=7&page=${page}` : 
+            TITLES_ENDPOINT + `?sort_by=-imdb_score&page_size=7&page=${page}`;
+
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 while (section.querySelector('.movies').children.length > 0) {
                     section.querySelector('.movies').removeChild(section.querySelector('.movies').lastChild);
                 }
-                data.results.forEach(movie => displayMovie(section.querySelector('.movies'), movie));
+                data.results.forEach((movie, index) => displayMovie(section.querySelector('.movies'), movie, index));
             });
     }
 
-    function displayMovie(section, movie) {
-        let movieElement = document.createElement('div');
-        movieElement.className = 'movie';
-        movieElement.innerHTML = `
-            <h3>${movie.title}</h3>
-            <img src="${movie.image_url}" alt="Affiche de ${movie.title}">
-        `;
-        section.appendChild(movieElement);
-        movieElement.addEventListener('click', function() {
-            displayMovieDetails(movie.id);
-        });
+    function displayMovie(section, movie, index = 0) {
+        if(index < 4) {
+            let movieElement = document.createElement('div');
+            movieElement.className = 'movie';
+            movieElement.innerHTML = `
+                <h3>${movie.title}</h3>
+                <img src="${movie.image_url}" alt="Affiche de ${movie.title}">
+            `;
+            section.appendChild(movieElement);
+            movieElement.addEventListener('click', function() {
+                displayMovieDetails(movie.id);
+            });
+        }
     }
 
     function displayMovieDetails(movieId) {
